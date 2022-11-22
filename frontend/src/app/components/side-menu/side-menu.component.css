@@ -1,0 +1,40 @@
+.side-menu {
+  background: #d3d3d3;
+  height: 100vh;
+  width: 100px;
+  padding: 10px;
+}
+
+.company-logo {
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.company-logo img {
+  max-height: 80px;
+  max-width: 80px;
+  border-radius: 50%;
+}
+
+.employee p {
+  margin-top: 40px;
+  font-weight: 700;
+  color: #ffffff;
+  display: block;
+}
+
+.list {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.list ul {
+  padding: 0;
+}
+
+.list ul li {
+  list-style: none;
+  margin: 20px 0;
+}
