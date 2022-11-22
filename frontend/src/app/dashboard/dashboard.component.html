@@ -1,13 +1,57 @@
 <div class="container">
-  <div>
-    Search function - filter between 2 salary range
+  <div class="search">
+    <div class="search-icon">
+      <img src="../../assets/images/search_icon_with_dollar_sign.png" alt="Search icon">
+    </div>
+    <div class="search-input">
+      <div class="description">
+        <p>Minimum Salary</p>
+        <p><strong>Enter Amount</strong></p>
+      </div>
+      <div class="dollar-sign">$</div>
+      <input class="search-input-box" type="number" [(ngModel)]="min_salary" (ngModelChange)="search()">
+    </div>
+
+    <span class="search-dash">&nbsp; - &nbsp;</span>
+
+    <div class="search-input">
+      <div class="description">
+        <p>Maximum Salary</p>
+        <p><strong>Enter Amount</strong></p>
+      </div>
+      <div class="dollar-sign">$</div>
+      <input class="search-input-box" type="number" [(ngModel)]="max_salary" (ngModelChange)="search()">
+    </div>
   </div>
 
   <div class="header">
-    Employees
+    <h3>Employees</h3>
   </div>
 
-  <div>
-    List of Employee details
+  <div class="data-table">
+    <table *ngIf="filtered_employees.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Login</th>
+          <th>Salary</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of filtered_employees">
+          <td>{{ employee.id }}</td>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.login }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>Edit | Delete</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="no-data" *ngIf="filtered_employees.length === 0">
+      No Data
+    </div>
   </div>
 </div>
