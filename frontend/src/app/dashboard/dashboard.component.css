@@ -111,3 +111,12 @@ table {
   color: #1E90FF;
   border-bottom: 1px solid black;
 }
+
+.emp-pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.ngx-pagination {
+  padding-left: 0;
+}

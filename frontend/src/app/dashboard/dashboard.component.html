@@ -32,6 +32,10 @@
     <button class="file-upload" (click)="onUpload()">Upload</button>
   </div>
 
+  <div class="emp-pagination">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+
   <div class="data-table">
     <table *ngIf="filtered_employees.length > 0">
       <thead>
@@ -44,7 +48,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let employee of filtered_employees">
+        <tr *ngFor="let employee of filtered_employees | paginate: { itemsPerPage: 10, currentPage: p }">
           <td>{{ employee.id }}</td>
           <td>{{ employee.name }}</td>
           <td>{{ employee.login }}</td>
@@ -57,5 +61,8 @@
     <div class="no-data" *ngIf="filtered_employees.length === 0">
       No Data
     </div>
+  </div>
+  <div class="emp-pagination">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FileUploadService } from '../service/file-upload.service';
 
 type Employee = {
@@ -11,12 +11,14 @@ type Employee = {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 
   constructor(private fileUploadService: FileUploadService) { }
 
+  p: number = 1;
   employees:Employee[] = [];
   filtered_employees:Employee[] = [];
   min_salary:any;
