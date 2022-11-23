@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileUploadService } from '../service/file-upload.service';
 
 type Employee = {
   id: string,
@@ -14,7 +15,7 @@ type Employee = {
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private fileUploadService: FileUploadService) { }
 
   employees:Employee[] = [];
   filtered_employees:Employee[] = [];
@@ -85,6 +86,7 @@ export class DashboardComponent implements OnInit {
     this.sortStatus.active = type;
     let status:any = this.sortStatus;
     status[type] = status[type] === 1 ? -1 : 1;
+
     this.filtered_employees.sort((a:any,b:any) => {
       const empA = a[type];
       const empB = b[type];
@@ -98,15 +100,48 @@ export class DashboardComponent implements OnInit {
 
       return comparison * +status[type];
     });
-    console.log(this.sortStatus);
   }
 
-  async onChange(event: any) {
-    this.file = await event.target.files[0];
-    console.log('on change: ', this.file);
+  async onFileUpload(event: any) {
+    const fileData = await event.target.files[0].text();
+    let employeeData: Employee[] = [];
+    let propertyNames: string[] = fileData.slice(0, fileData.indexOf('\r\n')).split(',');
+
+    employeeData = fileData.slice(fileData.indexOf('\n') + 1).split('\r\n');
+    employeeData = this.sanitizeData(employeeData);
+
+    if (employeeData.length === 0) {
+      console.log('File is empty, can\'t proceed.');
+      return;
+    }
+    employeeData = this.convertCSVtoJSONArray(employeeData, propertyNames);
+    this.file = employeeData;
+  }
+
+  sanitizeData(data: Array<any>) {
+    return data.filter((data: any) => data[0] === 'e');
+  }
+
+  convertCSVtoJSONArray(dataRows: any, propertyNames: any) {
+    return dataRows.map((data:any) => {
+      let employee = data.split(',');
+      let obj: any = new Object();
+
+      for (let i=0; i< propertyNames.length; i++) {
+        const property = propertyNames[i];
+
+        let val: any = employee[i];
+        obj[property] = property === 'salary' ? +val : val;
+      }
+      return obj;
+    });
   }
 
   onUpload() {
-    console.log(this.file);
+    if (!this.file) {
+      console.log('File is empty, can\'t upload.');
+      return;
+    }
+    this.fileUploadService.upload(this.file);
   }
 }

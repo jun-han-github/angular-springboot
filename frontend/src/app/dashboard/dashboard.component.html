@@ -28,8 +28,8 @@
     <h3>Employees</h3>
 
     <label>Upload employee data:</label>
-    <input type="file" accept=".csv, text/csv" (change)="onChange($event)">
-    <button *ngIf="file" class="file-upload" (click)="onUpload()">Upload</button>
+    <input type="file" accept=".csv, text/csv" #simplefile (change)="onFileUpload($event)">
+    <button class="file-upload" (click)="onUpload()">Upload</button>
   </div>
 
   <div class="data-table">
