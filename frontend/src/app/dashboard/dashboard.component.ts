@@ -34,8 +34,8 @@ export class DashboardComponent implements OnInit {
     this.employees = [
       {
         id: 'e0001',
-        name: 'Liu Junhan',
-        login: 'junhan123',
+        name: 'Sample Liu',
+        login: 'sample123',
         salary: 423.40
       },
       {
@@ -116,6 +116,13 @@ export class DashboardComponent implements OnInit {
     }
     employeeData = this.convertCSVtoJSONArray(employeeData, propertyNames);
     this.file = employeeData;
+    this.viewUploadedEmployees(employeeData);
+  }
+
+  viewUploadedEmployees(data: Employee[]) {
+    this.employees = data;
+    this.filtered_employees = data;
+    this.findMaxSalary();
   }
 
   sanitizeData(data: Array<any>) {
