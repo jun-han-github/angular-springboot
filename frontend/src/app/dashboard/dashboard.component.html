@@ -26,16 +26,20 @@
 
   <div class="header">
     <h3>Employees</h3>
+
+    <label>Upload employee data:</label>
+    <input type="file" accept=".csv, text/csv" (change)="onChange($event)">
+    <button *ngIf="file" class="file-upload" (click)="onUpload()">Upload</button>
   </div>
 
   <div class="data-table">
     <table *ngIf="filtered_employees.length > 0">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Login</th>
-          <th>Salary</th>
+          <th id="data-id" (click)="sort('id')">ID <i *ngIf="sortStatus.active === 'id'" [class]="'fa-solid fa-sort-' + (sortStatus.id === 1 ? 'up' : 'down')"></i></th>
+          <th id="data-name" (click)="sort('name')">Name <i *ngIf="sortStatus.active === 'name'" [class]="'fa-solid fa-sort-' + (sortStatus.name === 1 ? 'up' : 'down')"></i></th>
+          <th id="data-login" (click)="sort('login')">Login <i *ngIf="sortStatus.active === 'login'" [class]="'fa-solid fa-sort-' + (sortStatus.login === 1 ? 'up' : 'down')"></i></th>
+          <th id="data-salary" (click)="sort('salary')">Salary <i *ngIf="sortStatus.active === 'salary'" [class]="'fa-solid fa-sort-' + (sortStatus.salary === 1 ? 'up' : 'down')"></i></th>
           <th>Actions</th>
         </tr>
       </thead>

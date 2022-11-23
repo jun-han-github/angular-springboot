@@ -18,9 +18,16 @@ export class DashboardComponent implements OnInit {
 
   employees:Employee[] = [];
   filtered_employees:Employee[] = [];
-  city = '';
   min_salary:any;
   max_salary:any;
+  sortStatus = {
+    active: '',
+    id: 1,
+    name: 1,
+    login: 1,
+    salary: 1
+  }
+  file:any = null;
 
   ngOnInit(): void {
     this.employees = [
@@ -35,6 +42,12 @@ export class DashboardComponent implements OnInit {
         name: 'Harry Potter',
         login: 'hpotter',
         salary: 1000.00
+      },
+      {
+        id: 'e0003',
+        name: 'Severus Snape',
+        login: 'ssnape',
+        salary: 4000.00
       }
     ]
 
@@ -66,5 +79,34 @@ export class DashboardComponent implements OnInit {
 
       return e;
     });
+  }
+
+  sort(type: string) {
+    this.sortStatus.active = type;
+    let status:any = this.sortStatus;
+    status[type] = status[type] === 1 ? -1 : 1;
+    this.filtered_employees.sort((a:any,b:any) => {
+      const empA = a[type];
+      const empB = b[type];
+
+      let comparison = 0;
+      if (empA > empB) {
+        comparison = 1;
+      } else if (empA < empB) {
+        comparison = -1;
+      }
+
+      return comparison * +status[type];
+    });
+    console.log(this.sortStatus);
+  }
+
+  async onChange(event: any) {
+    this.file = await event.target.files[0];
+    console.log('on change: ', this.file);
+  }
+
+  onUpload() {
+    console.log(this.file);
   }
 }
