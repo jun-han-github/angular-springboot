@@ -112,6 +112,17 @@ export class DashboardComponent implements OnInit {
     const fileData = await event.target.files[0].text();
     let employeeData: Employee[] = [];
     let propertyNames: string[] = fileData.slice(0, fileData.indexOf('\r\n')).split(',');
+    if (
+      propertyNames[0] !== 'id' ||
+      propertyNames[1] !== 'login' ||
+      propertyNames[2] !== 'name' ||
+      propertyNames[3] !== 'salary' ||
+      propertyNames.length > 4
+    ) {
+      console.log(`File: '${event.target.files[0].name}' has incorrect columns: `, propertyNames.join(','));
+      return;
+    }
+    console.log('property names: ', propertyNames);
 
     employeeData = fileData.slice(fileData.indexOf('\n') + 1).split('\r\n');
 
@@ -139,7 +150,11 @@ export class DashboardComponent implements OnInit {
 
   isCorrupted(data: Array<any>) {
     const format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
-    return data.filter(data => format.test(data) && data[0] !== '#');
+    return data.filter(data => {
+      return (
+        format.test(data) || data.includes(',,') || data.startsWith(',') || data.endsWith(',')
+      ) && data[0] !== '#' && data !== ',,,';
+    });
   }
 
   sanitizeData(data: Array<any>) {
