@@ -97,6 +97,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // If an entry in the CSV contains an employee ID that already exists in the database, the existing
+  // entry in the database is updated
+
+  // If it does not exist, then a new entry is created
+
+  // For a complex use case of swapping logins between 2 IDs. You can
+  // accomplish this with 3 uploads:
+  // change first ID’s login to temporary one,
+  // change 2nd ID’s login to first ID’s,
+  // change the first ID to 2nd ID’s previous login.
+
   async onFileUpload(event: any) {
     const fileData = await event.target.files[0].text();
     let employeeData: Employee[] = [];
@@ -106,7 +117,7 @@ export class DashboardComponent implements OnInit {
 
     const corruptedData = this.isCorrupted(employeeData);
     if (corruptedData.length !== 0) {
-      console.log('File seems to be corrupted around these entries: ', corruptedData.join(','));
+      console.log(`File: '${event.target.files[0].name}' seems to be corrupted around these entries: `, corruptedData.join(','));
       return;
     }
 
