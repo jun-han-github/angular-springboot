@@ -67,6 +67,12 @@ button.file-upload {
   background-color: lightskyblue;
 }
 
+.no-data {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
 table {
   width: 100%;
   border-spacing: 0 15px;

@@ -28,16 +28,16 @@
     <h3>Employees</h3>
 
     <label>Upload employee data:</label>
-    <input type="file" accept=".csv, text/csv" #simplefile (change)="onFileUpload($event)">
+    <input type="file" accept=".csv, text/csv" (change)="onFileUpload($event)" multiple>
     <button class="file-upload" (click)="onUpload()">Upload</button>
   </div>
 
-  <div class="emp-pagination">
+  <div class="emp-pagination" *ngIf="employees.length > 0">
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
 
   <div class="data-table">
-    <table *ngIf="filtered_employees.length > 0">
+    <table>
       <thead>
         <tr>
           <th id="data-id" (click)="sort('id')">ID <i *ngIf="sortStatus.active === 'id'" [class]="'fa-solid fa-sort-' + (sortStatus.id === 1 ? 'up' : 'down')"></i></th>
@@ -47,7 +47,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="filtered_employees.length > 0">
         <tr *ngFor="let employee of filtered_employees | paginate: { itemsPerPage: 10, currentPage: p }">
           <td>{{ employee.id }}</td>
           <td>{{ employee.name }}</td>
@@ -59,10 +59,10 @@
     </table>
 
     <div class="no-data" *ngIf="filtered_employees.length === 0">
-      No Data
+      No available data
     </div>
   </div>
-  <div class="emp-pagination">
+  <div class="emp-pagination" *ngIf="employees.length > 0">
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
 </div>
