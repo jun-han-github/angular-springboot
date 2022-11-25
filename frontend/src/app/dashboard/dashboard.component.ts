@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { EmployeeService } from '../service/employee.service';
 import { FileUploadService } from '../service/file-upload.service';
 
 type Employee = {
@@ -16,7 +17,10 @@ type Employee = {
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private fileUploadService: FileUploadService) { }
+  constructor(
+    private fileUploadService: FileUploadService,
+    private employeeService: EmployeeService
+  ) { }
 
   p: number = 1;
   employees:Employee[] = [];
@@ -33,34 +37,23 @@ export class DashboardComponent implements OnInit {
   file:any = null;
 
   ngOnInit(): void {
-    this.employees = [
-      {
-        id: 'e0001',
-        name: 'Sample Liu',
-        login: 'sample123',
-        salary: 423.40
-      },
-      {
-        id: 'e0002',
-        name: 'Harry Potter',
-        login: 'hpotter',
-        salary: 1000.00
-      },
-      {
-        id: 'e0003',
-        name: 'Severus Snape',
-        login: 'ssnape',
-        salary: 4000.00
-      }
-    ]
-
-    this.filtered_employees = this.employees;
+    this.getAllEmployees();
     this.findMaxSalary();
   }
 
+  getAllEmployees(): void {
+    this.employeeService.getEmployees().subscribe(data => {
+      this.employees = data;
+      this.filtered_employees = this.employees;
+      this.findMaxSalary();
+    });
+  }
+
   findMaxSalary() {
-    const { salary } = this.employees.sort((a,b) => b.salary - a.salary)[0];
-    this.max_salary = salary;
+    if (this.employees.length > 0) {
+      const { salary } = this.employees.sort((a,b) => b.salary - a.salary)[0];
+      this.max_salary = salary;
+    }
   }
 
   search() {
@@ -110,8 +103,14 @@ export class DashboardComponent implements OnInit {
     let propertyNames: string[] = fileData.slice(0, fileData.indexOf('\r\n')).split(',');
 
     employeeData = fileData.slice(fileData.indexOf('\n') + 1).split('\r\n');
-    employeeData = this.sanitizeData(employeeData);
 
+    const corruptedData = this.isCorrupted(employeeData);
+    if (corruptedData.length !== 0) {
+      console.log('File seems to be corrupted around these entries: ', corruptedData.join(','));
+      return;
+    }
+
+    employeeData = this.sanitizeData(employeeData);
     if (employeeData.length === 0) {
       console.log('File is empty, can\'t proceed.');
       return;
@@ -125,6 +124,11 @@ export class DashboardComponent implements OnInit {
     this.employees = data;
     this.filtered_employees = data;
     this.findMaxSalary();
+  }
+
+  isCorrupted(data: Array<any>) {
+    const format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+    return data.filter(data => format.test(data) && data[0] !== '#');
   }
 
   sanitizeData(data: Array<any>) {
@@ -151,6 +155,7 @@ export class DashboardComponent implements OnInit {
       console.log('File is empty, can\'t upload.');
       return;
     }
+
     this.fileUploadService.upload(this.file);
   }
 }

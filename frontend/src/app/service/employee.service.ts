@@ -2,17 +2,25 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+type Employee = {
+  id: string,
+  name: string,
+  login: string,
+  salary: number
+}
+
 @Injectable({
   providedIn: 'root'
 })
 
-export class FileUploadService {
+export class EmployeeService {
 
   baseUrl = "http://localhost:8081";
 
   constructor(private http:HttpClient) { }
 
-  upload(fileData: any):Observable<any> {
-    return this.http.post(`${this.baseUrl}/users/upload`, fileData);
+  getEmployees(): Observable<Employee[]> {
+    const response = this.http.get<Employee[]>(`${this.baseUrl}/users`);
+    return response;
   }
 }
