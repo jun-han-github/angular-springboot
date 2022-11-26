@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { EmployeeService } from '../service/employee.service';
 import { FileUploadService } from '../service/file-upload.service';
+import Swal from 'sweetalert2';
 
 type Employee = {
   id: string,
@@ -112,7 +113,7 @@ export class DashboardComponent implements OnInit {
         propertyNames[3] !== 'salary' ||
         propertyNames.length > 4
       ) {
-        console.log(`File: '${event.target.files[i].name}' has incorrect columns: `, propertyNames.join(','));
+        Swal.fire('Incorrect columns', `File: '${event.target.files[i].name}' has incorrect columns: `, 'error');
         return;
       }
 
@@ -120,13 +121,13 @@ export class DashboardComponent implements OnInit {
 
       const corruptedData = this.isCorrupted(employeeData);
       if (corruptedData.length !== 0) {
-        console.log(`File: '${event.target.files[i].name}' seems to be corrupted around these entries: `, corruptedData.join(','));
+        Swal.fire('Corrupted data', `File: '${event.target.files[i].name}' seems to be corrupted around these entries:<br>${corruptedData.join('<br>')}`, 'error');
         return;
       }
 
       employeeData = this.sanitizeData(employeeData);
       if (employeeData.length === 0) {
-        console.log(`File; '${event.target.files[i].name}' is empty and won\'t be processed.`);
+        Swal.fire('Empty file', `File: '${event.target.files[i].name}' is empty and won\'t be processed.`, 'error');
       }
 
       employeeData = this.convertCSVtoJSONArray(employeeData, propertyNames);
@@ -135,11 +136,15 @@ export class DashboardComponent implements OnInit {
 
     const duplicates = this.checkDuplicateIdAndLogin(employeeArray);
     if (duplicates.length !== 0) {
-      console.log('Please check these values across all files: ', duplicates.join(', '));
+      const description = event.target.files.length === 1 ? 'in ' + event.target.files[0].name : 'across all uploaded files';
+      Swal.fire('Duplicate found', `Please check these value(s) ${description}:<br>${duplicates.join('<br>')}`, 'error');
       return;
     }
     this.file = employeeArray;
-    this.viewUploadedEmployees(employeeArray);
+    if (this.file && this.file.length !== 0) {
+      Swal.fire('Validation', 'All file checks have passed. You may upload.', 'success');
+      this.viewUploadedEmployees(employeeArray);
+    }
   }
 
   viewUploadedEmployees(data: Employee[]) {
@@ -202,10 +207,16 @@ export class DashboardComponent implements OnInit {
 
   onUpload() {
     if (!this.file) {
-      console.log('File is empty, can\'t upload.');
+      Swal.fire('Error', 'Couldn\'t upload because file is empty.', 'error');
       return;
     }
 
-    this.fileUploadService.upload(this.file);
+    this.fileUploadService.upload(this.file).subscribe({
+      next(response) {
+        Swal.fire('Completed', `Successfully uploaded ${response.length} entries.`, 'success');
+      }, error(message) {
+        Swal.fire('Error', message, 'error');
+      }
+    });
   }
 }

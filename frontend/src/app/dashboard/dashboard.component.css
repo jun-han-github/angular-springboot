@@ -126,3 +126,7 @@ table {
 .ngx-pagination {
   padding-left: 0;
 }
+
+.swal2-popup {
+  font-size: 12px !important;
+  font-family: Arial, Helvetica, sans-serif;}

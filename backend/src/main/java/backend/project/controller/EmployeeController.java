@@ -19,12 +19,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/users/upload")
-    public String addEmployees(@RequestBody List<Employee> employees) {
-        try {
-            service.addEmployees(employees);
-            return "Employees uploaded successfully";
-        } catch(Exception e) {
-            return e.getMessage();
-        }
+    public List<Employee> addEmployees(@RequestBody List<Employee> employees) {
+        return service.addEmployees(employees);
     }
 }
