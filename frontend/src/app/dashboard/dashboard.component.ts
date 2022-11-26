@@ -97,55 +97,79 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // If an entry in the CSV contains an employee ID that already exists in the database, the existing
-  // entry in the database is updated
-
-  // If it does not exist, then a new entry is created
-
-  // For a complex use case of swapping logins between 2 IDs. You can
-  // accomplish this with 3 uploads:
-  // change first ID’s login to temporary one,
-  // change 2nd ID’s login to first ID’s,
-  // change the first ID to 2nd ID’s previous login.
-
   async onFileUpload(event: any) {
-    const fileData = await event.target.files[0].text();
-    let employeeData: Employee[] = [];
-    let propertyNames: string[] = fileData.slice(0, fileData.indexOf('\r\n')).split(',');
-    if (
-      propertyNames[0] !== 'id' ||
-      propertyNames[1] !== 'login' ||
-      propertyNames[2] !== 'name' ||
-      propertyNames[3] !== 'salary' ||
-      propertyNames.length > 4
-    ) {
-      console.log(`File: '${event.target.files[0].name}' has incorrect columns: `, propertyNames.join(','));
+    const fileCount = event.target.files.length;
+
+    let employeeArray: Employee[] = [];
+    for (let i=0; i < fileCount; i++) {
+      const fileData = await event.target.files[i].text();
+      let employeeData: Employee[] = [];
+      let propertyNames: string[] = fileData.slice(0, fileData.indexOf('\r\n')).split(',');
+      if (
+        propertyNames[0] !== 'id' ||
+        propertyNames[1] !== 'login' ||
+        propertyNames[2] !== 'name' ||
+        propertyNames[3] !== 'salary' ||
+        propertyNames.length > 4
+      ) {
+        console.log(`File: '${event.target.files[i].name}' has incorrect columns: `, propertyNames.join(','));
+        return;
+      }
+
+      employeeData = fileData.slice(fileData.indexOf('\n') + 1).split('\r\n');
+
+      const corruptedData = this.isCorrupted(employeeData);
+      if (corruptedData.length !== 0) {
+        console.log(`File: '${event.target.files[i].name}' seems to be corrupted around these entries: `, corruptedData.join(','));
+        return;
+      }
+
+      employeeData = this.sanitizeData(employeeData);
+      if (employeeData.length === 0) {
+        console.log(`File; '${event.target.files[i].name}' is empty and won\'t be processed.`);
+      }
+
+      employeeData = this.convertCSVtoJSONArray(employeeData, propertyNames);
+      employeeArray = [...employeeArray, ...employeeData];
+    }
+
+    const duplicates = this.checkDuplicateIdAndLogin(employeeArray);
+    if (duplicates.length !== 0) {
+      console.log('Please check these values across all files: ', duplicates.join(', '));
       return;
     }
-    console.log('property names: ', propertyNames);
-
-    employeeData = fileData.slice(fileData.indexOf('\n') + 1).split('\r\n');
-
-    const corruptedData = this.isCorrupted(employeeData);
-    if (corruptedData.length !== 0) {
-      console.log(`File: '${event.target.files[0].name}' seems to be corrupted around these entries: `, corruptedData.join(','));
-      return;
-    }
-
-    employeeData = this.sanitizeData(employeeData);
-    if (employeeData.length === 0) {
-      console.log('File is empty, can\'t proceed.');
-      return;
-    }
-    employeeData = this.convertCSVtoJSONArray(employeeData, propertyNames);
-    this.file = employeeData;
-    this.viewUploadedEmployees(employeeData);
+    this.file = employeeArray;
+    this.viewUploadedEmployees(employeeArray);
   }
 
   viewUploadedEmployees(data: Employee[]) {
     this.employees = data;
     this.filtered_employees = data;
     this.findMaxSalary();
+  }
+
+  checkDuplicateIdAndLogin(employeeArray: Employee[]) {
+    let checkIdArray: string[] = [];
+    let checkLoginArray: string[] = [];
+    let duplicates: string[] = [];
+
+    employeeArray.map((employee: any) => {
+      const idExist = checkIdArray.includes(employee.id);
+      const loginExist = checkLoginArray.includes(employee.login);
+      if (!idExist) {
+        checkIdArray.push(employee.id);
+      } else {
+        duplicates.push('id:' + employee.id)
+      }
+
+      if (!loginExist) {
+        checkLoginArray.push(employee.login);
+      } else {
+        duplicates.push('login:' + employee.login)
+      }
+    });
+
+    return duplicates;
   }
 
   isCorrupted(data: Array<any>) {
