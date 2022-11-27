@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 type Employee = {
   id: string,
@@ -15,12 +16,10 @@ type Employee = {
 
 export class EmployeeService {
 
-  baseUrl = "http://localhost:8081";
-
   constructor(private http:HttpClient) { }
 
   getEmployees(): Observable<Employee[]> {
-    const response = this.http.get<Employee[]>(`${this.baseUrl}/users`);
+    const response = this.http.get<Employee[]>(`${environment.server_url}/users`);
     return response;
   }
 }
