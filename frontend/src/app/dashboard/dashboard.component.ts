@@ -2,13 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { EmployeeService } from '../service/employee.service';
 import { FileUploadService } from '../service/file-upload.service';
 import Swal from 'sweetalert2';
-
-type Employee = {
-  id: string,
-  name: string,
-  login: string,
-  salary: number
-}
+import { Employee } from '../interfaces/employee';
 
 @Component({
   selector: 'app-dashboard',
