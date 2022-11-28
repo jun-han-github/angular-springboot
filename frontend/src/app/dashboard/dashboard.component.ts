@@ -100,12 +100,14 @@ export class DashboardComponent implements OnInit {
 
   async onFileUpload(event: any) {
     const fileCount = event.target.files.length;
+    const fileSplitFormat = this.isMacDevice() ? '\n' : '\r\n';
 
     let employeeArray: Employee[] = [];
     for (let i=0; i < fileCount; i++) {
       const fileData = await event.target.files[i].text();
       let employeeData: Employee[] = [];
-      let propertyNames: string[] = fileData.slice(0, fileData.indexOf('\r\n')).split(',');
+      let propertyNames: string[] = fileData.slice(0, fileData.indexOf(fileSplitFormat)).split(',');
+      console.log(fileData, propertyNames);
       if (
         propertyNames[0] !== 'id' ||
         propertyNames[1] !== 'login' ||
@@ -114,20 +116,23 @@ export class DashboardComponent implements OnInit {
         propertyNames.length > 4
       ) {
         Swal.fire('Incorrect columns', `File: '${event.target.files[i].name}' has incorrect columns: `, 'error');
+        event.target.value = null;
         return;
       }
 
-      employeeData = fileData.slice(fileData.indexOf('\n') + 1).split('\r\n');
+      employeeData = fileData.slice(fileData.indexOf('\n') + 1).split(fileSplitFormat);
 
       const corruptedData = this.isCorrupted(employeeData);
       if (corruptedData.length !== 0) {
         Swal.fire('Corrupted data', `File: '${event.target.files[i].name}' seems to be corrupted around these entries:<br>${corruptedData.join('<br>')}`, 'error');
+        event.target.value = null;
         return;
       }
 
       employeeData = this.sanitizeData(employeeData);
       if (employeeData.length === 0) {
         Swal.fire('Empty file', `File: '${event.target.files[i].name}' is empty and won\'t be processed.`, 'error');
+        event.target.value = null;
       }
 
       employeeData = this.convertCSVtoJSONArray(employeeData, propertyNames);
@@ -138,6 +143,7 @@ export class DashboardComponent implements OnInit {
     if (duplicates.length !== 0) {
       const description = event.target.files.length === 1 ? 'in ' + event.target.files[0].name : 'across all uploaded files';
       Swal.fire('Duplicate found', `Please check these value(s) ${description}:<br>${duplicates.join('<br>')}`, 'error');
+      event.target.value = null;
       return;
     }
     this.file = employeeArray;
@@ -145,6 +151,10 @@ export class DashboardComponent implements OnInit {
       Swal.fire('Validation', 'All file checks have passed. You may upload.', 'success');
       this.viewUploadedEmployees(employeeArray);
     }
+  }
+
+  isMacDevice(): boolean {
+    return navigator.userAgent.includes('Mac');
   }
 
   viewUploadedEmployees(data: Employee[]) {
