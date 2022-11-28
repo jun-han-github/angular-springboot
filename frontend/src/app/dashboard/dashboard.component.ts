@@ -39,7 +39,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllEmployees();
-    this.findMaxSalary();
   }
 
   getAllEmployees(): void {
@@ -107,7 +106,7 @@ export class DashboardComponent implements OnInit {
       const fileData = await event.target.files[i].text();
       let employeeData: Employee[] = [];
       let propertyNames: string[] = fileData.slice(0, fileData.indexOf(fileSplitFormat)).split(',');
-      console.log(fileData, propertyNames);
+
       if (
         propertyNames[0] !== 'id' ||
         propertyNames[1] !== 'login' ||
@@ -149,18 +148,11 @@ export class DashboardComponent implements OnInit {
     this.file = employeeArray;
     if (this.file && this.file.length !== 0) {
       Swal.fire('Validation', 'All file checks have passed. You may upload.', 'success');
-      this.viewUploadedEmployees(employeeArray);
     }
   }
 
   isMacDevice(): boolean {
     return navigator.userAgent.includes('Mac');
-  }
-
-  viewUploadedEmployees(data: Employee[]) {
-    this.employees = data;
-    this.filtered_employees = data;
-    this.findMaxSalary();
   }
 
   checkDuplicateIdAndLogin(employeeArray: Employee[]) {
@@ -221,12 +213,11 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.fileUploadService.upload(this.file).subscribe({
-      next(response) {
-        Swal.fire('Completed', `Successfully uploaded ${response.length} entries.`, 'success');
-      }, error(message) {
-        Swal.fire('Error', message, 'error');
-      }
+    this.fileUploadService.upload(this.file).subscribe(response => {
+      Swal.fire('Completed', `Successfully uploaded ${response.length} entries.`, 'success');
+      this.getAllEmployees();
+    }, error => {
+      Swal.fire('Error', error.message, 'error');
     });
   }
 }
