@@ -1,0 +1,32 @@
+<div class="edit-box">
+  <div class="header">
+    <div class="float-button" (click)="closeActionBox()"><strong>X</strong></div>
+    <div>
+      <h3>Edit</h3>
+    </div>
+    <div>&nbsp;</div>
+  </div>
+  <p>{{ title }} ID: <strong>{{ childData?.id }}</strong></p>
+
+  <div class="details">
+    <form #newForm="ngForm" (ngSubmit)="onUpdateForm(newForm)">
+      <input class="edit-input-box" type="hidden" name="id" [ngModel]="childData?.id" required>
+      <div class="edit-input">
+        <label for="Name">Name:</label>
+        <input class="edit-input-box" type="text" name="name" [ngModel]="childData?.name" required>
+      </div>
+      <div class="edit-input">
+        <label for="Login">Login:</label>
+        <input class="edit-input-box" type="text" name="login" [ngModel]="childData?.login" required>
+      </div>
+      <div class="edit-input">
+        <label for="Salary">Salary:</label>
+        <input class="edit-input-box" type="text" name="salary" [ngModel]="childData?.salary" required>
+      </div>
+    </form>
+  </div>
+
+  <div class="error-message" *ngIf="error">Error: </div>
+
+  <button class="save-button" type="submit" (click)="onUpdateForm(newForm)"><strong>Save</strong></button>
+</div>

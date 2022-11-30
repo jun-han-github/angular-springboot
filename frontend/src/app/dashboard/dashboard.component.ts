@@ -3,6 +3,7 @@ import { EmployeeService } from '../service/employee.service';
 import { FileUploadService } from '../service/file-upload.service';
 import Swal from 'sweetalert2';
 import { Employee } from '../interfaces/employee';
+import { EventsService } from '../service/events.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private fileUploadService: FileUploadService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private events: EventsService
   ) { }
 
   p: number = 1;
@@ -30,6 +32,8 @@ export class DashboardComponent implements OnInit {
     salary: 1
   }
   file:any = null;
+
+  edit_employee = false;
 
   ngOnInit(): void {
     this.getAllEmployees();
@@ -89,6 +93,10 @@ export class DashboardComponent implements OnInit {
 
       return comparison * +status[type];
     });
+  }
+
+  openActionBox(employeeData: Employee) {
+    this.events.publish('app:open-action', { title: 'Employee', data: employeeData });
   }
 
   async onFileUpload(event: any) {

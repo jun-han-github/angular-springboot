@@ -1,4 +1,9 @@
 <div class="home">
   <side-menu></side-menu>
   <router-outlet></router-outlet>
+
+  <!-- Action Box -->
+  <div class="pop-up" *ngIf="action_box">
+    <action-box [title]="parentTitle" [childData]="parentData"></action-box>
+  </div>
 </div>
