@@ -16,4 +16,9 @@ export class EmployeeService {
     const response = this.http.get<Employee[]>(`${environment.server_url}/users`);
     return response;
   }
+
+  updateEmployees(data: Employee) {
+    const response = this.http.patch<Employee>(`${environment.server_url}/users`, data);
+    return response;
+  }
 }

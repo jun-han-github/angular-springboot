@@ -28,5 +28,5 @@
 
   <div class="error-message" *ngIf="error">Error: </div>
 
-  <button class="save-button" type="submit" (click)="onUpdateForm(newForm)"><strong>Save</strong></button>
+  <button class="save-button" [ngClass]="success ? 'save-success' : ''" type="submit" (click)="onUpdateForm(newForm)"><strong>{{ status }}</strong></button>
 </div>

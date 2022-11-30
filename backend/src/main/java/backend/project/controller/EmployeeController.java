@@ -22,4 +22,9 @@ public class EmployeeController {
     public List<Employee> addEmployees(@RequestBody List<Employee> employees) {
         return service.addEmployees(employees);
     }
+
+    @PatchMapping("/users")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        return service.updateEmployee(employee);
+    }
 }

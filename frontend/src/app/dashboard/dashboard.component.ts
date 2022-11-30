@@ -17,7 +17,11 @@ export class DashboardComponent implements OnInit {
     private fileUploadService: FileUploadService,
     private employeeService: EmployeeService,
     private events: EventsService
-  ) { }
+  ) {
+    this.events.subscribe('dashboard:refresh', () => {
+      this.getAllEmployees();
+    });
+  }
 
   p: number = 1;
   employees:Employee[] = [];

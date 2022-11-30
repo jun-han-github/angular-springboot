@@ -20,4 +20,8 @@ public class EmployeeService {
     public List<Employee> addEmployees(List<Employee> employees) {
         return repository.saveAll(employees);
     }
+
+    public Employee updateEmployee(Employee employee) {
+        return repository.save(employee);
+    }
 }
