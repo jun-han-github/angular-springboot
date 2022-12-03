@@ -21,4 +21,9 @@ export class EmployeeService {
     const response = this.http.patch<Employee>(`${environment.server_url}/users`, data);
     return response;
   }
+
+  deleteEmployee(id: string) {
+    const response = this.http.delete<Employee>(`${environment.server_url}/users/${id}`)
+    return response;
+  }
 }

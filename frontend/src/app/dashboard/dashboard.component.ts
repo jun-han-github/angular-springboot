@@ -103,6 +103,24 @@ export class DashboardComponent implements OnInit {
     this.events.publish('app:open-action', { title: 'Employee', data: employeeData });
   }
 
+  openDeleteBox(employee: Employee) {
+    Swal.fire({
+      icon: 'warning',
+      title: `Confirmation to delete '${employee.name}' permanently?`,
+      showCancelButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteEmployee(employee.id);
+      }
+    });
+  };
+
+  deleteEmployee(id: string) {
+    this.employeeService.deleteEmployee(id).subscribe(employee => {
+      Swal.fire('Delete Employee', `Employee: ${employee.name} have been deleted successfully.`, 'success');
+    });
+  }
+
   async onFileUpload(event: any) {
     const fileCount = event.target.files.length;
     const fileSplitFormat = this.isMacDevice() ? '\n' : '\r\n';

@@ -118,6 +118,23 @@ table {
   border-bottom: 1px solid black;
 }
 
+.action-button {
+  margin: 0px 5px;
+  padding: 5px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.edit {
+  border: 1px solid blue;
+  color: blue;
+}
+
+.delete {
+  border: 1px solid red;
+  color: red;
+}
+
 .emp-pagination {
   display: flex;
   justify-content: center;
@@ -131,3 +148,4 @@ table {
   font-size: 12px !important;
   font-family: Arial, Helvetica, sans-serif;
 }
+

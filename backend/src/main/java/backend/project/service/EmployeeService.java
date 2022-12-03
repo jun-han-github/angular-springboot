@@ -24,4 +24,10 @@ public class EmployeeService {
     public Employee updateEmployee(Employee employee) {
         return repository.save(employee);
     }
+
+    public Employee deleteEmployee(String id) {
+        Employee existingEmployee = repository.findById(id).orElse(null);
+        repository.delete(existingEmployee);
+        return existingEmployee;
+    }
 }

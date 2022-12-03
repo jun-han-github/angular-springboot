@@ -48,12 +48,19 @@
         </tr>
       </thead>
       <tbody *ngIf="filtered_employees.length > 0">
-        <tr *ngFor="let employee of filtered_employees | paginate: { itemsPerPage: 10, currentPage: p }" (click)="openActionBox(employee)">
+        <tr *ngFor="let employee of filtered_employees | paginate: { itemsPerPage: 10, currentPage: p }">
           <td>{{ employee.id }}</td>
           <td>{{ employee.name }}</td>
           <td>{{ employee.login }}</td>
           <td>{{ employee.salary.toFixed(2) }}</td>
-          <td>Edit | Delete</td>
+          <td>
+            <button class="action-button edit" (click)="openActionBox(employee)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-button delete" (click)="openDeleteBox(employee)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
