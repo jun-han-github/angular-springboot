@@ -9,17 +9,10 @@
 
   <div class="list">
     <ul>
-      <a href="/">
-        <li>Employees</li>
-      </a>
-      <a href="/second-page">
-        <li>Second Page</li>
-      </a>
-      <a href="/third-page">
-        <li>Third Page</li>
-      </a>
-      <a href="/fourth-page">
-        <li>Fourth Page</li>
+      <a [href]="list.url" *ngFor="let list of lists">
+        <li class="side-menu-list slim-menu">
+          <i [class]="list.icon"></i><span>{{ list.name }}</span>
+        </li>
       </a>
     </ul>
   </div>
