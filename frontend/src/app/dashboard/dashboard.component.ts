@@ -111,6 +111,7 @@ export class DashboardComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.deleteEmployee(employee.id);
+        this.events.publish('dashboard:refresh');
       }
     });
   };

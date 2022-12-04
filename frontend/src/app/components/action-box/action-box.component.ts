@@ -30,7 +30,7 @@ export class ActionBoxComponent implements OnInit {
   }
 
   onUpdateForm(data?: any): void {
-    const response = this.employeeService.updateEmployees(data.value);
+    const response = this.employeeService.updateEmployee(data.value);
     response.subscribe(response => {
       if (response) {
         this.success = true;
