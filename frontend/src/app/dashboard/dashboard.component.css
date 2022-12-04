@@ -1,6 +1,6 @@
 .container {
   width: 75vw;
-  padding: 30px;
+  padding: 20px;
   overflow: hidden;
 }
 
@@ -18,10 +18,13 @@
 
 .search-input {
   border: 1px solid grey;
+  border-radius: 8px;
   height: 40px;
   width: 40%;
+  min-width: 200px;
   display: flex;
   align-items: center;
+  margin: 8px;
 }
 
 .search-input .description {
@@ -76,6 +79,7 @@ button.file-upload {
 table {
   width: 100%;
   border-spacing: 0 15px;
+  overflow-x: auto;
 }
 
 .data-table th {
@@ -119,7 +123,7 @@ table {
 }
 
 .action-button {
-  margin: 0px 5px;
+  margin: 8px;
   padding: 5px 15px;
   border-radius: 25px;
   cursor: pointer;
@@ -149,3 +153,47 @@ table {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
+@media screen and (max-width: 768px) {
+  .search {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-dash,
+  .search-icon {
+    display: none;
+  }
+
+  .header,
+  .emp-pagination {
+    font-size: 14px;
+  }
+
+  .data-table thead {
+    font-size: 12px;
+  }
+
+  .data-table tbody {
+    font-size: 11px;
+  }
+
+  /* second last child - because column Action is now display:none */
+  .data-table tr td:nth-last-child(2) {
+    border-radius: 0 10px 10px 0;
+  }
+
+  .action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+
+  .desktop {
+    display: none;
+  }
+}

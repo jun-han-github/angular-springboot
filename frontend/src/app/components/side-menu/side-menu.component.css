@@ -52,7 +52,7 @@
   align-items: center;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
   .slim-menu i {
     margin: auto;
     height: 30px;
@@ -65,6 +65,17 @@
 
   .slim-menu span {
     display: none;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .side-menu {
+    width: 10vw;
+  }
+
+  .employee p {
+    font-size: 11px;
   }
 }
 

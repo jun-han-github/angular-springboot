@@ -44,7 +44,7 @@
           <th id="data-name" (click)="sort('name')">Name <i *ngIf="sortStatus.active === 'name'" [class]="'fa-solid fa-sort-' + (sortStatus.name === 1 ? 'up' : 'down')"></i></th>
           <th id="data-login" (click)="sort('login')">Login <i *ngIf="sortStatus.active === 'login'" [class]="'fa-solid fa-sort-' + (sortStatus.login === 1 ? 'up' : 'down')"></i></th>
           <th id="data-salary" (click)="sort('salary')">Salary <i *ngIf="sortStatus.active === 'salary'" [class]="'fa-solid fa-sort-' + (sortStatus.salary === 1 ? 'up' : 'down')"></i></th>
-          <th>Actions</th>
+          <th class="desktop">Actions</th>
         </tr>
       </thead>
       <tbody *ngIf="filtered_employees.length > 0">
@@ -53,7 +53,7 @@
           <td>{{ employee.name }}</td>
           <td>{{ employee.login }}</td>
           <td>{{ employee.salary.toFixed(2) }}</td>
-          <td>
+          <td class="desktop">
             <button class="action-button edit" (click)="openActionBox(employee)">
               <i class="fas fa-edit"></i>
             </button>
