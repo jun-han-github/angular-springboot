@@ -197,3 +197,8 @@ table {
     display: none;
   }
 }
+
+.geolocation {
+  width: 100%;
+  text-align: right;
+}

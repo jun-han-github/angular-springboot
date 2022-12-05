@@ -4,6 +4,7 @@ import { FileUploadService } from '../service/file-upload.service';
 import Swal from 'sweetalert2';
 import { Employee } from '../interfaces/employee';
 import { EventsService } from '../service/events.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,8 +40,22 @@ export class DashboardComponent implements OnInit {
 
   edit_employee = false;
 
+  country = '';
+
   ngOnInit(): void {
     this.getAllEmployees();
+    this.getGeolocation();
+  }
+
+  async getGeolocation() {
+    navigator.geolocation.getCurrentPosition(async position => {
+      const crd = position.coords;
+      let api = `http://api.geonames.org/countryCodeJSON?lat=${crd.latitude}&lng=${crd.longitude}&username=${environment.geonames_user}`;
+
+      const response = await fetch(api);
+      const location = await response.json();
+      this.country = location.countryName;
+    });
   }
 
   getAllEmployees(): void {
