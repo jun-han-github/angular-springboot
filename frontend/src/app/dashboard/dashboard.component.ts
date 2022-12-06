@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
       this.country = localStorage.getItem('geolocation');
       return;
     }
-    
+
     const expiry = localStorage?.getItem('geolocation_expiry') ?? 0;
     const datetime = new Date().getTime();
     if (datetime < +expiry) {
@@ -223,6 +223,11 @@ export class DashboardComponent implements OnInit {
   removeEmptyColumns(array: any[]) {
     let commas = 0;
     let testSubject: any = array[0];
+
+    if (!testSubject.endsWith(',')) {
+      return array;
+    }
+
     while (testSubject.endsWith(',')) {
       testSubject = testSubject.slice(0, -1);
       commas++;
@@ -234,9 +239,8 @@ export class DashboardComponent implements OnInit {
     let checkIdArray: string[] = [];
     let checkLoginArray: string[] = [];
     let duplicates: string[] = [];
-    let count = 0;
+
     employeeArray.map((employee: any) => {
-      count++;
       const idExist = checkIdArray.includes(employee.id);
       const loginExist = checkLoginArray.includes(employee.login);
       if (!idExist) {
