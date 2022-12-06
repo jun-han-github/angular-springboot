@@ -40,11 +40,11 @@ export class DashboardComponent implements OnInit {
 
   edit_employee = false;
 
-  country = '';
+  country: string | null = '';
 
   ngOnInit(): void {
     this.getAllEmployees();
-    this.getGeolocation();
+    this.setGeolocation();
   }
 
   async getGeolocation() {
@@ -55,7 +55,31 @@ export class DashboardComponent implements OnInit {
       const response = await fetch(api);
       const location = await response.json();
       this.country = location.countryName;
+      localStorage.setItem('geolocation', location.countryName);
+      localStorage.setItem('geolocation_expiry', this.setExpiryInHours(24));
     });
+  }
+
+  setGeolocation(): void {
+    if (localStorage.getItem('geolocation')) {
+      this.country = localStorage.getItem('geolocation');
+      return;
+    }
+    
+    const expiry = localStorage?.getItem('geolocation_expiry') ?? 0;
+    const datetime = new Date().getTime();
+    if (datetime < +expiry) {
+      localStorage.removeItem('geolocation');
+    } else {
+      this.getGeolocation();
+    };
+  }
+
+  setExpiryInHours(duration: number) {
+    const datetime = new Date();
+    const expiry = datetime.getTime() + (duration * 3600);
+    // human_readable -> new Date(expiry * 1000)
+    return '' + expiry;
   }
 
   getAllEmployees(): void {
@@ -143,15 +167,15 @@ export class DashboardComponent implements OnInit {
 
     let employeeArray: Employee[] = [];
     for (let i=0; i < fileCount; i++) {
-      const fileData = await event.target.files[i].text();
+      let fileData = await event.target.files[i].text();
       let employeeData: Employee[] = [];
-      let propertyNames: string[] = fileData.slice(0, fileData.indexOf(fileSplitFormat)).split(',');
+      let propertyNames: string[] = fileData.slice(0, fileData.indexOf(fileSplitFormat)).split(',').filter((value:string) => value !== '');
 
       if (
-        propertyNames[0] !== 'id' ||
-        propertyNames[1] !== 'login' ||
-        propertyNames[2] !== 'name' ||
-        propertyNames[3] !== 'salary' ||
+        propertyNames[0].toLowerCase() !== 'id' ||
+        propertyNames[1].toLowerCase() !== 'login' ||
+        propertyNames[2].toLowerCase() !== 'name' ||
+        propertyNames[3].toLowerCase() !== 'salary' ||
         propertyNames.length > 4
       ) {
         Swal.fire('Incorrect columns', `File: '${event.target.files[i].name}' has incorrect columns: `, 'error');
@@ -160,6 +184,7 @@ export class DashboardComponent implements OnInit {
       }
 
       employeeData = fileData.slice(fileData.indexOf('\n') + 1).split(fileSplitFormat);
+      employeeData = this.removeEmptyColumns(employeeData);
 
       const corruptedData = this.isCorrupted(employeeData);
       if (corruptedData.length !== 0) {
@@ -195,12 +220,23 @@ export class DashboardComponent implements OnInit {
     return navigator.userAgent.includes('Mac');
   }
 
+  removeEmptyColumns(array: any[]) {
+    let commas = 0;
+    let testSubject: any = array[0];
+    while (testSubject.endsWith(',')) {
+      testSubject = testSubject.slice(0, -1);
+      commas++;
+    }
+    return array.map(value => value.slice(0, (-commas)));
+  }
+
   checkDuplicateIdAndLogin(employeeArray: Employee[]) {
     let checkIdArray: string[] = [];
     let checkLoginArray: string[] = [];
     let duplicates: string[] = [];
-
+    let count = 0;
     employeeArray.map((employee: any) => {
+      count++;
       const idExist = checkIdArray.includes(employee.id);
       const loginExist = checkLoginArray.includes(employee.login);
       if (!idExist) {
@@ -238,7 +274,7 @@ export class DashboardComponent implements OnInit {
       let obj: any = new Object();
 
       for (let i=0; i< propertyNames.length; i++) {
-        const property = propertyNames[i];
+        const property = propertyNames[i].toLowerCase();
 
         let val: any = employee[i];
         obj[property] = property === 'salary' ? +val : val;
