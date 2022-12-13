@@ -14,9 +14,12 @@ export class SideMenuComponent implements OnInit {
     { url: '/fourth-page', name: 'Fourth Page', icon: 'fas fa-tasks' },
   ];
 
+  authorized = false;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.authorized = localStorage.getItem('token') ? true : false;
   }
 
 }

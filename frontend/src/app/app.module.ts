@@ -9,13 +9,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ActionBoxComponent } from './components/action-box/action-box.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     SideMenuComponent,
-    ActionBoxComponent
+    ActionBoxComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
