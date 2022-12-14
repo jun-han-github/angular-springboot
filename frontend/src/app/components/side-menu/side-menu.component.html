@@ -4,11 +4,11 @@
   </div>
 
   <div class="employee">
-    <p class="name" *ngIf="authorized">Liu Junhan</p>
+    <p class="name">Liu Junhan</p>
   </div>
 
   <div class="list">
-    <ul *ngIf="authorized">
+    <ul>
       <a [href]="list.url" *ngFor="let list of lists">
         <li class="side-menu-list slim-menu">
           <i [class]="list.icon"></i><span>{{ list.name }}</span>

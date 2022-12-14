@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { EventsService } from './service/events.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private events: EventsService,
+    private router: Router,
     private location: Location
   ) {
     this.events.subscribe('app:open-action', (data) => {
@@ -39,9 +41,15 @@ export class AppComponent implements OnInit {
     return publicPages.includes( this.location.path() );
   }
 
+  isAuthenticated() {
+    return sessionStorage.getItem('token') ? true : false;
+  }
+
   checkAuth() {
-    if (this.publicPages()) {
-      this.authorised = localStorage.getItem('token') ?  true : false;
+    if (!this.publicPages() && this.isAuthenticated()) {
+      this.authorised = true
+    } else {
+      this.router.navigate(['/login']);
     }
   }
 }

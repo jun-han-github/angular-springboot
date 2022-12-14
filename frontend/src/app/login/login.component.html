@@ -5,18 +5,19 @@
             <img [src]="image_url" alt="profile pic">
         </div>
         <fieldset>
-            <legend>Username</legend>
+            <legend>Email</legend>
             <div class="fieldset-input-with-icon">
-                <input type="text">
+                <input class="form-control" type="text" name="email" #email (keydown.enter)="login(email.value, password.value)" required>
                 <i class="fa-solid fa-lock"></i>
             </div>
         </fieldset>
         <fieldset>
             <legend>Password</legend>
             <div class="fieldset-input-with-icon">
-                <input type="text">
+                <input class="form-control" type="password" name="password" #password (keydown.enter)="login(email.value, password.value)" required>
                 <i class="fa-solid fa-key"></i>
             </div>
         </fieldset>
+        <button class="custom-button" type="submit" (click)="login(email.value, password.value)">Login</button>
     </div>
 </div>

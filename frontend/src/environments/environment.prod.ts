@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  server_url: '',
+  geonames_user: ''
 };

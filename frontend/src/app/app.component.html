@@ -1,5 +1,5 @@
 <div class="home">
-  <side-menu></side-menu>
+  <side-menu *ngIf="!publicPages()"></side-menu>
   <router-outlet></router-outlet>
 
   <!-- Action Box -->
