@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ActionBoxComponent } from './components/action-box/action-box.component';
 import { LoginComponent } from './login/login.component';
+import { CoursesComponent } from './courses/courses.component';
+import { InputWithFieldsetComponent } from './components/input-with-fieldset/input-with-fieldset.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { LoginComponent } from './login/login.component';
     DashboardComponent,
     SideMenuComponent,
     ActionBoxComponent,
-    LoginComponent
+    LoginComponent,
+    CoursesComponent,
+    InputWithFieldsetComponent
   ],
   imports: [
     BrowserModule,

@@ -9,9 +9,9 @@ export class SideMenuComponent implements OnInit {
 
   lists = [
     { url: '/', name: 'Employees', icon: 'fas fa-users' },
-    { url: '/second-page', name: 'Second Page', icon: 'fas fa-wallet' },
-    { url: '/third-page', name: 'Third Page', icon: 'fas fa-book' },
-    { url: '/fourth-page', name: 'Fourth Page', icon: 'fas fa-tasks' },
+    { url: '/courses', name: 'Courses', icon: 'fas fa-page' },
+    { url: '/notes', name: 'Notes', icon: 'fas fa-book' },
+    { url: '/analytics', name: 'Analytics', icon: 'fas fa-graph' },
   ];
 
   constructor() { }

@@ -1,0 +1,7 @@
+<fieldset>
+    <legend>{{ title }}</legend>
+    <div class="fieldset-input-with-icon">
+        <input class="form-control" [type]="type" [name]="name" #name (keydown.enter)="doSomething(name.value)" required>
+        <i [class]="logo"></i>
+    </div>
+</fieldset>

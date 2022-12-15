@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="course-wrapper">
+        <app-input-with-fieldset
+            [title]="'Module'"
+            [logo]="'fa-solid fa-lock'"
+            [name]="'module'"
+        >
+        </app-input-with-fieldset>
+        <app-input-with-fieldset
+            [title]="'Subject'"
+            [logo]="'fa-solid fa-lock'"
+            [name]="'subject'"
+        >
+        </app-input-with-fieldset>
+        <fieldset>
+            <legend>Question</legend>
+            <div class="fieldset-input-with-icon">
+                <textarea name="question" id="question" cols="30" rows="10" #question></textarea>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Answer</legend>
+            <div class="fieldset-input-with-icon">
+                <textarea name="answer" id="answer" cols="30" rows="10" #answer></textarea>
+            </div>
+        </fieldset>
+        <button class="custom-button" type="submit" (click)="save(question.value, answer.value)">Save</button>
+    </div>
+</div>
